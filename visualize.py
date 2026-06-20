@@ -118,9 +118,8 @@ def main() -> None:
     ckpt = torch.load(args.checkpoint, map_location="cpu", weights_only=False)
 
     config: GPTConfig = ckpt["config"]
-    vocab: dict = ckpt["vocab"]
-    stoi: dict = vocab["stoi"]
-    itos: dict = vocab["itos"]
+    vocab = ckpt["vocab"]
+    chars, stoi, itos = vocab
 
     print(
         f"  d_model={config.d_model}, n_heads={config.n_heads}, "
@@ -234,11 +233,8 @@ def main() -> None:
         f"attention_layer{args.layer}_head{args.head}.png",
     )
 
-    # attn_weights for the chosen layer: (1, n_heads, T, T)
-    layer_attn = attn_weights_list[args.layer]
-
     plot_attention_heatmap(
-        attn_weights=layer_attn,
+        attn_weights=attn_weights_list,
         tokens=token_labels,
         layer=args.layer,
         head=args.head,
