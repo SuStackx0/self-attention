@@ -115,7 +115,7 @@ def main() -> None:
     # Load checkpoint
     # ------------------------------------------------------------------
     print(f"Loading checkpoint: {args.checkpoint}")
-    ckpt = torch.load(args.checkpoint, map_location="cpu")
+    ckpt = torch.load(args.checkpoint, map_location="cpu", weights_only=False)
 
     config: GPTConfig = ckpt["config"]
     vocab: dict = ckpt["vocab"]

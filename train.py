@@ -103,11 +103,10 @@ def evaluate(model: nn.Module, val_loader, device: torch.device) -> float:
 # Text generation helper
 # ---------------------------------------------------------------------------
 
-def generate_sample(model: nn.Module, vocab: dict, seed_text: str,
+def generate_sample(model: nn.Module, vocab: tuple, seed_text: str,
                     max_new_tokens: int, device: torch.device) -> str:
     """Encode seed_text, run model.generate, decode and return the result."""
-    stoi = vocab["stoi"]
-    itos = vocab["itos"]
+    chars, stoi, itos = vocab
 
     # Encode — skip unknown characters silently
     ids = [stoi[ch] for ch in seed_text if ch in stoi]
@@ -161,7 +160,8 @@ def main() -> None:
         batch_size=args.batch_size,
         split=0.9,
     )
-    vocab_size = len(vocab["stoi"])
+    chars, stoi, itos = vocab
+    vocab_size = len(stoi)
     print(f"      vocab size : {vocab_size}")
     print(f"      train batches: {len(train_loader)}, "
           f"val batches: {len(val_loader)}")
